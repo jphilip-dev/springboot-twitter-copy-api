@@ -7,12 +7,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.jphilips.twittercopy.dto.ExceptionResponseDTO;
 import com.jphilips.twittercopy.dto.FieldErrorResponseDTO;
+import com.jphilips.twittercopy.exception.custom.CustomValidationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -20,8 +20,8 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     
     
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity<FieldErrorResponseDTO> handleFieldErrors(MethodArgumentNotValidException ex){
+    @ExceptionHandler(value = CustomValidationException.class)
+    public ResponseEntity<FieldErrorResponseDTO> handleFieldErrors(CustomValidationException ex){
     	
     	FieldErrorResponseDTO fieldErrorResponseDTO = new FieldErrorResponseDTO();
     	

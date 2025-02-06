@@ -15,7 +15,10 @@ import com.jphilips.twittercopy.dto.MyUserRequestDTO;
 import com.jphilips.twittercopy.dto.mapper.MyUserMapper;
 import com.jphilips.twittercopy.entity.MyUser;
 import com.jphilips.twittercopy.enums.UserRole;
+import com.jphilips.twittercopy.exception.custom.CustomValidationException;
 import com.jphilips.twittercopy.repository.MyUserRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AuthService {
@@ -34,7 +37,8 @@ public class AuthService {
 		this.encoder = encoder;
 		this.jwtService = jwtService;
 	}
-
+	
+	@Transactional
 	public JwtResponseDTO login(LoginRequestDTO loginRequestDTO, BindingResult bindingResult)
 			throws MethodArgumentNotValidException {
 		
@@ -52,9 +56,7 @@ public class AuthService {
 		
 
 		if (bindingResult.hasErrors()) {
-			
-			throw new MethodArgumentNotValidException(null, bindingResult);
-			
+			throw new CustomValidationException(bindingResult);
 		}
 		
 		
@@ -73,9 +75,7 @@ public class AuthService {
 		}
 		
 		if (bindingResult.hasErrors()) {
-			
-			throw new MethodArgumentNotValidException(null, bindingResult);
-			
+			throw new CustomValidationException(bindingResult);
 		}
 		
 		MyUser myUser = MyUserMapper.toEntity(myUserRequestDTO);
@@ -95,7 +95,7 @@ public class AuthService {
 	
 	private void handleAuthenticationError(LoginRequestDTO loginRequestDTO, BindingResult bindingResult) {
         if (!userExists(loginRequestDTO.getUsername())) {
-            bindingResult.rejectValue("username", "username.notfound", "Username does not exist.");
+            bindingResult.rejectValue("username", "username.notfound", "Username don't exist.");
         } else {
             bindingResult.rejectValue("password", "password.incorrect", "Incorrect password.");
         }

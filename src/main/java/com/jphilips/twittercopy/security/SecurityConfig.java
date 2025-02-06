@@ -36,8 +36,10 @@ public class SecurityConfig {
 
 			// any other end points
 			registry.anyRequest().authenticated();
-		}).csrf(csrf -> csrf.disable())
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
+			})
+			.csrf(csrf -> csrf.disable())
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.build();
 	}
 
 	@Bean
