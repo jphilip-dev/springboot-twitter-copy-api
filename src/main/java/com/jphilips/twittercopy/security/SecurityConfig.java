@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.jphilips.twittercopy.service.MyUserService;
 
@@ -22,9 +23,11 @@ import com.jphilips.twittercopy.service.MyUserService;
 public class SecurityConfig {
 	
 	private MyUserService myUserService;
+	private JwtAuthFilter jwtAuthFilter;
 	
-	public SecurityConfig(MyUserService myUserService) {
+	public SecurityConfig(MyUserService myUserService, JwtAuthFilter jwtAuthFilter) {
 		this.myUserService = myUserService;
+		this.jwtAuthFilter = jwtAuthFilter;
 	}
 
 	@Bean
@@ -37,6 +40,7 @@ public class SecurityConfig {
 			// any other end points
 			registry.anyRequest().authenticated();
 			})
+			.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 			.csrf(csrf -> csrf.disable())
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.build();

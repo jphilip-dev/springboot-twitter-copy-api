@@ -1,4 +1,6 @@
 application.log
+/private.properties
+
 
 # Eclipse
 *.class

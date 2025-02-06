@@ -14,12 +14,20 @@ import com.jphilips.twittercopy.dto.ExceptionResponseDTO;
 import com.jphilips.twittercopy.dto.FieldErrorResponseDTO;
 import com.jphilips.twittercopy.exception.custom.CustomValidationException;
 
+import io.jsonwebtoken.JwtException;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     
+    // to catch exceptions from filter
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ExceptionResponseDTO> handleJwtException(JwtException ex) {
+    	return formatExceptionResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
     
+    // using custom exception to avoid method parameter argument of MethodArgumentNotValidException
     @ExceptionHandler(value = CustomValidationException.class)
     public ResponseEntity<FieldErrorResponseDTO> handleFieldErrors(CustomValidationException ex){
     	
@@ -35,7 +43,7 @@ public class GlobalExceptionHandler {
     	
     }
 
-
+    // General Exception handler
 	@ExceptionHandler(value = Exception.class)
 	public ResponseEntity<ExceptionResponseDTO> handleException(Exception ex) {
 		
