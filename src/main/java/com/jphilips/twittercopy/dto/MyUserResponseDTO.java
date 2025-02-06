@@ -9,7 +9,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class MyUserResomseDTO {
+public class MyUserResponseDTO {
 	
 	private Long id;
 

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.jphilips.twittercopy.dto.MyUserRequestDTO;
-import com.jphilips.twittercopy.dto.MyUserResomseDTO;
+import com.jphilips.twittercopy.dto.MyUserResponseDTO;
 import com.jphilips.twittercopy.dto.mapper.MyUserMapper;
 import com.jphilips.twittercopy.entity.MyUser;
 import com.jphilips.twittercopy.enums.UserRole;
@@ -24,7 +24,7 @@ public class MyUserService {
 	}
 	
 	@Transactional // for mapper, to be able to access roles 
-	public List<MyUserResomseDTO> getAllUsers(){
+	public List<MyUserResponseDTO> getAllUsers(){
 		return repository.findAll().stream()
 							.map(myUser -> MyUserMapper.toDto(myUser))
 							.collect(Collectors.toList());
@@ -32,14 +32,14 @@ public class MyUserService {
 	}
 	
 	@Transactional
-	public MyUserResomseDTO getUserById(Long id) {
+	public MyUserResponseDTO getUserById(Long id) {
 		return MyUserMapper.toDto(
 							repository.findById(id)
 										.orElseThrow(() -> new IllegalArgumentException())); // placeholder exception
 	}
 	
 	@Transactional
-	public MyUserResomseDTO addUser(MyUserRequestDTO myUserRequestDTO) {
+	public MyUserResponseDTO addUser(MyUserRequestDTO myUserRequestDTO) {
 		
 		MyUser myUser = MyUserMapper.toEntity(myUserRequestDTO);
 		
