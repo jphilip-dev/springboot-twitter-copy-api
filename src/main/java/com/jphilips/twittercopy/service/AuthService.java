@@ -18,7 +18,6 @@ import com.jphilips.twittercopy.enums.UserRole;
 import com.jphilips.twittercopy.exception.custom.CustomValidationException;
 import com.jphilips.twittercopy.repository.MyUserRepository;
 
-import jakarta.transaction.Transactional;
 
 @Service
 public class AuthService {
@@ -38,7 +37,6 @@ public class AuthService {
 		this.jwtService = jwtService;
 	}
 	
-	@Transactional
 	public JwtResponseDTO login(LoginRequestDTO loginRequestDTO, BindingResult bindingResult)
 			throws MethodArgumentNotValidException {
 		

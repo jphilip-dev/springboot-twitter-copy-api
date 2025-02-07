@@ -68,4 +68,6 @@ public class SecurityConfig {
 	AuthenticationManager authenticationManager() {
 		return new ProviderManager(authenticationProvider());
 	}
+	
+	
 }

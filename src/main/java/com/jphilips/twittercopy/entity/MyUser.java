@@ -1,8 +1,14 @@
 package com.jphilips.twittercopy.entity;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.jphilips.twittercopy.enums.UserRole;
 
@@ -23,7 +29,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class MyUser {
+public class MyUser implements UserDetails  {
+
+	private static final long serialVersionUID = 4939788519809163533L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -84,5 +93,12 @@ public class MyUser {
 			}
 		}
 
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		 return roles.stream()
+	                .map(role -> new SimpleGrantedAuthority(role.getRole().toString()))
+	                .collect(Collectors.toList());
 	}
 }
