@@ -3,7 +3,6 @@ package com.jphilips.twittercopy.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +28,7 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public ResponseEntity<JwtResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO,
-			BindingResult bindingResult) throws MethodArgumentNotValidException {
+			BindingResult bindingResult)  {
 
 		JwtResponseDTO jwt = service.login(loginRequestDTO, bindingResult);
 
@@ -39,7 +38,7 @@ public class AuthController {
 
 	@PostMapping("/register")
 	public ResponseEntity<Void> register(@Valid @RequestBody MyUserRequestDTO myUserRequestDTO,
-			BindingResult bindingResult) throws MethodArgumentNotValidException {
+			BindingResult bindingResult) {
 
 		service.register(myUserRequestDTO, bindingResult);
 

@@ -1,8 +1,7 @@
 package com.jphilips.twittercopy.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -28,15 +27,24 @@ public class TweetService {
 		this.tweetRepository = tweetRepository;
 	}
 	
-	public List<TweetResponseDTO> getAllMyTweets(Authentication authentication, Pageable pageable){
-		return tweetRepository.findByMyUserOrderByIdAsc( findByAuth(authentication),pageable).stream()
-													.map(tweet -> TweetMapper.toDto(tweet))
-													.collect(Collectors.toList());
+	public Page<TweetResponseDTO> getAllMyTweets(Authentication authentication, Pageable pageable){
+		Page<Tweet> tweetsPage = tweetRepository.findByMyUserOrderByIdAsc( findByAuth(authentication),pageable);
+		
+		return tweetsPage.map(tweet -> TweetMapper.toDto(tweet));
 	}
 	
 	public TweetResponseDTO getTweetById(Long id) {
 		return TweetMapper.toDto(findById(id));
 	}
+	
+	public Page<TweetResponseDTO> getTweetsFromFollowing(Authentication authentication, Pageable pageable) {
+        MyUser myUser = findByAuth(authentication);
+        
+        Page<Tweet> tweetsPage = tweetRepository.findTweetsFromFollowing(myUser.getId(), pageable);
+
+        return tweetsPage.map(tweet -> TweetMapper.toDto(tweet));
+
+    }
 	
 	@Transactional
 	public void addTweet(Authentication authentication, TweetRequestDTO tweetRequestDTO) {
@@ -44,10 +52,14 @@ public class TweetService {
 		 
 		 Tweet tweet = new Tweet();
 		 TweetMetrics metrics = new TweetMetrics();
+		 metrics.setCommentCount(0L);
+		 metrics.setLikeCount(0L);
+		 metrics.setShareCount(0L);
 		 
 		 tweet.setMyUser(myUser);
 		 tweet.setTweet(tweetRequestDTO.getTweet());
 		 tweet.setMetrics(metrics);
+		 tweet.setScore(0);
 		 
 		 tweetRepository.save(tweet);
 	}

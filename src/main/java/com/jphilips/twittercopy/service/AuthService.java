@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.jphilips.twittercopy.dto.JwtResponseDTO;
 import com.jphilips.twittercopy.dto.LoginRequestDTO;
@@ -37,8 +36,7 @@ public class AuthService {
 		this.jwtService = jwtService;
 	}
 	
-	public JwtResponseDTO login(LoginRequestDTO loginRequestDTO, BindingResult bindingResult)
-			throws MethodArgumentNotValidException {
+	public JwtResponseDTO login(LoginRequestDTO loginRequestDTO, BindingResult bindingResult) {
 		
 		if (!bindingResult.hasErrors()) {
 			try {
@@ -65,7 +63,7 @@ public class AuthService {
 	
 	
 	
-	public void register(MyUserRequestDTO myUserRequestDTO, BindingResult bindingResult) throws MethodArgumentNotValidException {
+	public void register(MyUserRequestDTO myUserRequestDTO, BindingResult bindingResult) {
 		if (!bindingResult.hasErrors() && userExists(myUserRequestDTO.getUsername())) {
 			
 			bindingResult.rejectValue("username", "username.exists", "Username alreadt exists.");
