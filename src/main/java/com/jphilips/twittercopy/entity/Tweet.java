@@ -45,4 +45,28 @@ public class Tweet {
 		metrics.setTweet(this);
 	}
 	
+	// helper methods
+	public void addLike() {
+		metrics.setLikeCount(metrics.getLikeCount() + 1);
+	}
+	public void removeLike() {
+		metrics.setLikeCount(metrics.getLikeCount() - 1);
+	}
+	
+	
+	public void addComment() {
+		metrics.setCommentCount(metrics.getCommentCount() + 1);
+	}
+	public void removeComment() {
+		metrics.setCommentCount(metrics.getCommentCount() - 1);
+	}
+	
+	
+	public void addShare() {
+		metrics.setShareCount(metrics.getShareCount() + 1);
+	}
+	public void removeShare() {
+		metrics.setShareCount(metrics.getShareCount() - 1);
+	}
+	
 }
