@@ -12,11 +12,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jphilips.twittercopy.dto.TweetCommentRequestDTO;
+import com.jphilips.twittercopy.dto.TweetCommentResponseDTO;
+import com.jphilips.twittercopy.dto.TweetLikeResponseDTO;
 import com.jphilips.twittercopy.dto.TweetRequestDTO;
 import com.jphilips.twittercopy.dto.TweetResponseDTO;
+import com.jphilips.twittercopy.dto.TweetShareResponseDTO;
 import com.jphilips.twittercopy.service.TweetService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/api/tweets")
@@ -43,8 +52,8 @@ public class TweetController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Void> postMethodName(Authentication authentication,
-			@RequestBody TweetRequestDTO tweetRequestDTO) {
+	public ResponseEntity<Void> addTweet(Authentication authentication,
+			@Valid @RequestBody TweetRequestDTO tweetRequestDTO) {
 		tweetService.addTweet(authentication, tweetRequestDTO);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
@@ -54,5 +63,37 @@ public class TweetController {
 		tweetService.deleteTweet(authentication, tweetId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@PutMapping("/{tweetId}/likes")
+	public ResponseEntity<Void>  likeTweet(Authentication authentication,@PathVariable Long tweetId) {
+		tweetService.likeTweet(authentication, tweetId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping("/{tweetId}/shares")
+	public ResponseEntity<Void>  shareTweet(Authentication authentication,@PathVariable Long tweetId) {
+		tweetService.shareTweet(authentication, tweetId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping("/{tweetId}/comments")
+	public ResponseEntity<Void>  commentTweet(Authentication authentication,@PathVariable Long tweetId, @Valid @RequestBody TweetCommentRequestDTO tweetCommentRequestDTO) {
+		tweetService.commentTweet(authentication, tweetId, tweetCommentRequestDTO);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/{tweetId}/likes")
+	public Page<TweetLikeResponseDTO> getTweetLikes(Authentication authentication,@PathVariable Long tweetId, Pageable pageable) {
+		return tweetService.getLikes(authentication, tweetId, pageable);
+	}
+	@GetMapping("/{tweetId}/shares")
+	public Page<TweetShareResponseDTO> getTweetShares(Authentication authentication,@PathVariable Long tweetId, Pageable pageable) {
+		return tweetService.getShares(authentication, tweetId, pageable);
+	}
+	@GetMapping("/{tweetId}/comments")
+	public Page<TweetCommentResponseDTO> getTweetComments(Authentication authentication,@PathVariable Long tweetId, Pageable pageable) {
+		return tweetService.getComments(authentication, tweetId, pageable);
+	}
+	
 
 }
